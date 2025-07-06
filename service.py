@@ -46,8 +46,11 @@ class ModerationService:
         if bert_scores is None:
             return regex_scores
         
+        # Get all unique categories from both checkers
+        all_categories = set(regex_scores.keys()) | set(bert_scores.keys())
+        
         combined = {}
-        for category in regex_scores.keys():
+        for category in all_categories:
             # Take maximum of both scores
             regex_score = regex_scores.get(category, 0.0)
             bert_score = bert_scores.get(category, 0.0)
@@ -66,21 +69,21 @@ class ModerationService:
                 "pii/ip_address": scores.get("pii/ip_address", 0.0) > self.flagging_threshold,
                 "pii/iban": scores.get("pii/iban", 0.0) > self.flagging_threshold,
             },
-            # Legacy categories (always False for PII detector)
-            sexual=False,
-            hate=False,
-            harassment=False,
-            illicit=False,
-            violence=False,
+            # Content moderation categories
+            sexual=scores.get("sexual", 0.0) > self.flagging_threshold,
+            hate=scores.get("hate", 0.0) > self.flagging_threshold,
+            harassment=scores.get("harassment", 0.0) > self.flagging_threshold,
+            illicit=scores.get("illicit", 0.0) > self.flagging_threshold,
+            violence=scores.get("violence", 0.0) > self.flagging_threshold,
             **{
-                "sexual/minors": False,
-                "hate/threatening": False,
-                "harassment/threatening": False,
-                "illicit/violent": False,
-                "violence/graphic": False,
-                "self-harm": False,
-                "self-harm/intent": False,
-                "self-harm/instructions": False,
+                "sexual/minors": scores.get("sexual/minors", 0.0) > self.flagging_threshold,
+                "hate/threatening": scores.get("hate/threatening", 0.0) > self.flagging_threshold,
+                "harassment/threatening": scores.get("harassment/threatening", 0.0) > self.flagging_threshold,
+                "illicit/violent": scores.get("illicit/violent", 0.0) > self.flagging_threshold,
+                "violence/graphic": scores.get("violence/graphic", 0.0) > self.flagging_threshold,
+                "self-harm": scores.get("self-harm", 0.0) > self.flagging_threshold,
+                "self-harm/intent": scores.get("self-harm/intent", 0.0) > self.flagging_threshold,
+                "self-harm/instructions": scores.get("self-harm/instructions", 0.0) > self.flagging_threshold,
             }
         )
     
@@ -95,21 +98,21 @@ class ModerationService:
                 "pii/ip_address": scores.get("pii/ip_address", 0.0),
                 "pii/iban": scores.get("pii/iban", 0.0),
             },
-            # Legacy categories (always 0.0 for PII detector)
-            sexual=0.0,
-            hate=0.0,
-            harassment=0.0,
-            illicit=0.0,
-            violence=0.0,
+            # Content moderation categories
+            sexual=scores.get("sexual", 0.0),
+            hate=scores.get("hate", 0.0),
+            harassment=scores.get("harassment", 0.0),
+            illicit=scores.get("illicit", 0.0),
+            violence=scores.get("violence", 0.0),
             **{
-                "sexual/minors": 0.0,
-                "hate/threatening": 0.0,
-                "harassment/threatening": 0.0,
-                "illicit/violent": 0.0,
-                "violence/graphic": 0.0,
-                "self-harm": 0.0,
-                "self-harm/intent": 0.0,
-                "self-harm/instructions": 0.0,
+                "sexual/minors": scores.get("sexual/minors", 0.0),
+                "hate/threatening": scores.get("hate/threatening", 0.0),
+                "harassment/threatening": scores.get("harassment/threatening", 0.0),
+                "illicit/violent": scores.get("illicit/violent", 0.0),
+                "violence/graphic": scores.get("violence/graphic", 0.0),
+                "self-harm": scores.get("self-harm", 0.0),
+                "self-harm/intent": scores.get("self-harm/intent", 0.0),
+                "self-harm/instructions": scores.get("self-harm/instructions", 0.0),
             }
         )
     
@@ -123,19 +126,19 @@ class ModerationService:
         # For now, we only support text input
         input_type = ["text"]
         
-        # PII Categories
+        # PII Categories - use actual field names, not aliases
         if categories.pii_phone:
-            setattr(applied_types, "pii/phone", input_type)
+            applied_types.pii_phone = input_type
         if categories.pii_email:
-            setattr(applied_types, "pii/email", input_type)
+            applied_types.pii_email = input_type
         if categories.pii_credit_card:
-            setattr(applied_types, "pii/credit_card", input_type)
+            applied_types.pii_credit_card = input_type
         if categories.pii_ip_address:
-            setattr(applied_types, "pii/ip_address", input_type)
+            applied_types.pii_ip_address = input_type
         if categories.pii_iban:
-            setattr(applied_types, "pii/iban", input_type)
+            applied_types.pii_iban = input_type
         
-        # Legacy categories (for compatibility, but won't be flagged by PII detector)
+        # Content moderation categories
         if categories.sexual:
             applied_types.sexual = input_type
         if categories.hate:
@@ -147,21 +150,21 @@ class ModerationService:
         if categories.violence:
             applied_types.violence = input_type
         if categories.sexual_minors:
-            setattr(applied_types, "sexual/minors", input_type)
+            applied_types.sexual_minors = input_type
         if categories.hate_threatening:
-            setattr(applied_types, "hate/threatening", input_type)
+            applied_types.hate_threatening = input_type
         if categories.harassment_threatening:
-            setattr(applied_types, "harassment/threatening", input_type)
+            applied_types.harassment_threatening = input_type
         if categories.illicit_violent:
-            setattr(applied_types, "illicit/violent", input_type)
+            applied_types.illicit_violent = input_type
         if categories.violence_graphic:
-            setattr(applied_types, "violence/graphic", input_type)
+            applied_types.violence_graphic = input_type
         if categories.self_harm:
-            setattr(applied_types, "self-harm", input_type)
+            applied_types.self_harm = input_type
         if categories.self_harm_intent:
-            setattr(applied_types, "self-harm/intent", input_type)
+            applied_types.self_harm_intent = input_type
         if categories.self_harm_instructions:
-            setattr(applied_types, "self-harm/instructions", input_type)
+            applied_types.self_harm_instructions = input_type
             
         return applied_types
     

@@ -51,7 +51,7 @@ curl http://localhost:8000/v1/moderations \
   -H "Content-Type: application/json" \
   -d '{
     "model": "omni-moderation-latest",
-    "input": "My phone is 030-12345678 and E-Mail max@example.de"
+    "input": "My phone is 01542345678 and E-Mail max@example.de"
   }'
 ```
 
