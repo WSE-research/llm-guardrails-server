@@ -35,29 +35,19 @@ class BertModerationChecker(BaseModerationChecker):
         except (OSError, ValueError) as e:
             # Fallback to a general sentiment model if toxic-bert is not available
             print(f"Could not load {model_name}, falling back to sentiment model: {e}")
-            self.classifier = pipeline(
-                "text-classification",
-                model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-                device=0 if self.device == "cuda" else -1,
-                return_all_scores=True
-            )
+            raise ImportError(
+                "BertModerationChecker requires a valid HuggingFace model. "
+                "Please install the transformers library and ensure the model is available."
+            ) from e
         
         # Category mapping based on BERT toxic model outputs
         # Maps BERT labels to moderation categories
         self.category_mapping = {
             "harassment": ["toxic", "insult"],
-            "harassment/threatening": ["toxic", "threat", "insult"],
-            "hate": ["toxic", "identity_hate"],
-            "hate/threatening": ["toxic", "identity_hate", "threat"],
+            "harassment/threatening": ["threat"],
+            "hate": ["identity_hate"],
+            "hate/threatening": ["threat"],
             "violence": ["toxic", "threat", "severe_toxic"],
-            "violence/graphic": ["toxic", "threat", "severe_toxic"],
-            "sexual": ["toxic", "obscene"],
-            "sexual/minors": ["toxic", "obscene", "severe_toxic"],
-            "self-harm": ["toxic", "threat"],
-            "self-harm/intent": ["toxic", "threat"],
-            "self-harm/instructions": ["toxic", "threat"],
-            "illicit": ["toxic"],
-            "illicit/violent": ["toxic", "threat", "severe_toxic"],
         }
     
     def check(self, text: str) -> Dict[str, float]:

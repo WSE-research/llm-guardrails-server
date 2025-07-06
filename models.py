@@ -18,19 +18,11 @@ class Categories(BaseModel):
     pii_iban: bool = Field(default=False, alias="pii/iban")
     
     # Legacy content moderation categories (for compatibility)
-    sexual: bool = False
     hate: bool = False
     harassment: bool = False
-    illicit: bool = False
     violence: bool = False
-    sexual_minors: bool = Field(default=False, alias="sexual/minors")
     hate_threatening: bool = Field(default=False, alias="hate/threatening") 
     harassment_threatening: bool = Field(default=False, alias="harassment/threatening")
-    illicit_violent: bool = Field(default=False, alias="illicit/violent")
-    violence_graphic: bool = Field(default=False, alias="violence/graphic")
-    self_harm: bool = Field(default=False, alias="self-harm")
-    self_harm_intent: bool = Field(default=False, alias="self-harm/intent")
-    self_harm_instructions: bool = Field(default=False, alias="self-harm/instructions")
     
     class Config:
         validate_by_name = True
@@ -46,19 +38,11 @@ class CategoryScores(BaseModel):
     pii_iban: float = Field(default=0.0, alias="pii/iban")
     
     # Legacy content moderation categories (for compatibility)
-    sexual: float = 0.0
     hate: float = 0.0
     harassment: float = 0.0
-    illicit: float = 0.0
     violence: float = 0.0
-    sexual_minors: float = Field(default=0.0, alias="sexual/minors")
     hate_threatening: float = Field(default=0.0, alias="hate/threatening")
     harassment_threatening: float = Field(default=0.0, alias="harassment/threatening") 
-    illicit_violent: float = Field(default=0.0, alias="illicit/violent")
-    violence_graphic: float = Field(default=0.0, alias="violence/graphic")
-    self_harm: float = Field(default=0.0, alias="self-harm")
-    self_harm_intent: float = Field(default=0.0, alias="self-harm/intent")
-    self_harm_instructions: float = Field(default=0.0, alias="self-harm/instructions")
     
     class Config:
         validate_by_name = True
@@ -74,19 +58,11 @@ class CategoryAppliedInputTypes(BaseModel):
     pii_iban: List[str] = Field(default=[], alias="pii/iban")
     
     # Legacy content moderation categories (for compatibility)
-    sexual: List[str] = []
     hate: List[str] = []
     harassment: List[str] = []
-    illicit: List[str] = []
     violence: List[str] = []
-    sexual_minors: List[str] = Field(default=[], alias="sexual/minors")
     hate_threatening: List[str] = Field(default=[], alias="hate/threatening")
     harassment_threatening: List[str] = Field(default=[], alias="harassment/threatening")
-    illicit_violent: List[str] = Field(default=[], alias="illicit/violent") 
-    violence_graphic: List[str] = Field(default=[], alias="violence/graphic")
-    self_harm: List[str] = Field(default=[], alias="self-harm")
-    self_harm_intent: List[str] = Field(default=[], alias="self-harm/intent")
-    self_harm_instructions: List[str] = Field(default=[], alias="self-harm/instructions")
     
     class Config:
         validate_by_name = True

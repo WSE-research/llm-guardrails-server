@@ -70,20 +70,13 @@ class ModerationService:
                 "pii/iban": scores.get("pii/iban", 0.0) > self.flagging_threshold,
             },
             # Content moderation categories
-            sexual=scores.get("sexual", 0.0) > self.flagging_threshold,
             hate=scores.get("hate", 0.0) > self.flagging_threshold,
             harassment=scores.get("harassment", 0.0) > self.flagging_threshold,
             illicit=scores.get("illicit", 0.0) > self.flagging_threshold,
             violence=scores.get("violence", 0.0) > self.flagging_threshold,
             **{
-                "sexual/minors": scores.get("sexual/minors", 0.0) > self.flagging_threshold,
                 "hate/threatening": scores.get("hate/threatening", 0.0) > self.flagging_threshold,
-                "harassment/threatening": scores.get("harassment/threatening", 0.0) > self.flagging_threshold,
-                "illicit/violent": scores.get("illicit/violent", 0.0) > self.flagging_threshold,
-                "violence/graphic": scores.get("violence/graphic", 0.0) > self.flagging_threshold,
-                "self-harm": scores.get("self-harm", 0.0) > self.flagging_threshold,
-                "self-harm/intent": scores.get("self-harm/intent", 0.0) > self.flagging_threshold,
-                "self-harm/instructions": scores.get("self-harm/instructions", 0.0) > self.flagging_threshold,
+                "harassment/threatening": scores.get("harassment/threatening", 0.0) > self.flagging_threshold, 
             }
         )
     
@@ -99,20 +92,14 @@ class ModerationService:
                 "pii/iban": scores.get("pii/iban", 0.0),
             },
             # Content moderation categories
-            sexual=scores.get("sexual", 0.0),
             hate=scores.get("hate", 0.0),
             harassment=scores.get("harassment", 0.0),
             illicit=scores.get("illicit", 0.0),
             violence=scores.get("violence", 0.0),
             **{
-                "sexual/minors": scores.get("sexual/minors", 0.0),
                 "hate/threatening": scores.get("hate/threatening", 0.0),
                 "harassment/threatening": scores.get("harassment/threatening", 0.0),
                 "illicit/violent": scores.get("illicit/violent", 0.0),
-                "violence/graphic": scores.get("violence/graphic", 0.0),
-                "self-harm": scores.get("self-harm", 0.0),
-                "self-harm/intent": scores.get("self-harm/intent", 0.0),
-                "self-harm/instructions": scores.get("self-harm/instructions", 0.0),
             }
         )
     
@@ -139,32 +126,16 @@ class ModerationService:
             applied_types.pii_iban = input_type
         
         # Content moderation categories
-        if categories.sexual:
-            applied_types.sexual = input_type
         if categories.hate:
             applied_types.hate = input_type
         if categories.harassment:
             applied_types.harassment = input_type
-        if categories.illicit:
-            applied_types.illicit = input_type
         if categories.violence:
             applied_types.violence = input_type
-        if categories.sexual_minors:
-            applied_types.sexual_minors = input_type
         if categories.hate_threatening:
             applied_types.hate_threatening = input_type
         if categories.harassment_threatening:
             applied_types.harassment_threatening = input_type
-        if categories.illicit_violent:
-            applied_types.illicit_violent = input_type
-        if categories.violence_graphic:
-            applied_types.violence_graphic = input_type
-        if categories.self_harm:
-            applied_types.self_harm = input_type
-        if categories.self_harm_intent:
-            applied_types.self_harm_intent = input_type
-        if categories.self_harm_instructions:
-            applied_types.self_harm_instructions = input_type
             
         return applied_types
     
@@ -200,12 +171,8 @@ class ModerationService:
             categories.pii_phone, categories.pii_email,
             categories.pii_ip_address, categories.pii_iban,
             # Legacy categories (for compatibility)
-            categories.sexual, categories.hate, categories.harassment,
-            categories.illicit, categories.violence, categories.sexual_minors,
+            categories.violence, 
             categories.hate_threatening, categories.harassment_threatening,
-            categories.illicit_violent, categories.violence_graphic,
-            categories.self_harm, categories.self_harm_intent,
-            categories.self_harm_instructions
         ])
         
         return ModerationResult(
