@@ -50,7 +50,7 @@ curl http://localhost:8000/v1/moderations \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "omni-moderation-latest",
+    "model": "moderation-latest",
     "input": "My phone is 01542345678 and E-Mail max@example.de"
   }'
 ```
@@ -68,7 +68,7 @@ Analyze text for  PII content. Compatible with OpenAI's moderation API.
 **Request:**
 ```json
 {
-  "model": "omni-moderation-latest",
+  "model": "moderation-latest",
   "input": "Text to analyze for  PII"
 }
 ```
@@ -77,7 +77,7 @@ Analyze text for  PII content. Compatible with OpenAI's moderation API.
 ```json
 {
   "id": "modr-xxxxx",
-  "model": "omni-moderation-latest",
+  "model": "moderation-latest",
   "results": [
     {
       "flagged": true,

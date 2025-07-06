@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 class ModerationRequest(BaseModel):
     """Request model for moderation API."""
     input: Union[str, List[str]] = Field(..., description="Text to analyze for moderation")
-    model: Optional[str] = Field(default="omni-moderation-latest", description="Model to use for moderation")
+    model: Optional[str] = Field(default="moderation-latest", description="Model to use for moderation")
 
 
 class Categories(BaseModel):

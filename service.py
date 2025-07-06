@@ -182,7 +182,7 @@ class ModerationService:
             category_applied_input_types=applied_input_types
         )
     
-    def moderate(self, input_data: Union[str, List[str]], model: str = "omni-moderation-latest") -> ModerationResponse:
+    def moderate(self, input_data: Union[str, List[str]], model: str = "moderation-latest") -> ModerationResponse:
         """
         Moderate input data (text or list of texts).
         
